@@ -5,6 +5,7 @@ specifiers:
   '@types/react': 18.2.6
   '@types/react-dom': 18.2.4
   autoprefixer: 10.4.14
+  clsx: ^1.2.1
   eslint: 8.40.0
   eslint-config-next: 13.4.2
   next: 13.4.2
@@ -19,6 +20,7 @@ dependencies:
   '@types/react': 18.2.6
   '@types/react-dom': 18.2.4
   autoprefixer: 10.4.14_postcss@8.4.23
+  clsx: 1.2.1
   eslint: 8.40.0
   eslint-config-next: 13.4.2_3qfatcekpgbllh6uk5ivyhkbxq
   next: 13.4.2_biqbaboplfbrettd7655fr4n2y
@@ -615,6 +617,11 @@ packages:
 
   /client-only/0.0.1:
     resolution: {integrity: sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==}
+    dev: false
+
+  /clsx/1.2.1:
+    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
+    engines: {node: '>=6'}
     dev: false
 
   /color-convert/2.0.1:
