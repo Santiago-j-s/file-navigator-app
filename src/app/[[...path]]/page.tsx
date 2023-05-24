@@ -1,5 +1,7 @@
 import clsx from "clsx";
+import Image from "next/image";
 import Link from "next/link";
+import { homedir } from "os";
 import Icon from "../icons/Icon";
 import {
   FileType,
@@ -12,7 +14,7 @@ import {
   textExtensions,
 } from "../services";
 
-interface DirectoryItemProps {
+interface FileItemProps {
   name: string;
   access: boolean;
   hidden: boolean;
@@ -20,7 +22,7 @@ interface DirectoryItemProps {
   path: string;
 }
 
-function FileItem({ name, access, hidden, type, path }: DirectoryItemProps) {
+function FileItem({ name, access, hidden, type, path }: FileItemProps) {
   return (
     <Link href={path}>
       <li
@@ -47,68 +49,41 @@ function FileItem({ name, access, hidden, type, path }: DirectoryItemProps) {
   );
 }
 
-interface WrapperProps {
-  path: string[];
-  children: React.ReactNode;
-}
-
-function Wrapper({ path, children }: WrapperProps) {
-  return (
-    <main className="flex flex-col min-h-screen p-8 bg-gray-50">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-4xl font-bold text-gray-800">File Navigator App</h1>
-        <div className="px-4 py-2 font-medium text-white bg-gray-800 rounded-md hover:bg-gray-700">
-          {path?.length > 0 ? path.join(" / ") : "Home"}
-        </div>
-      </div>
-      {children}
-    </main>
-  );
-}
-
 interface DirectoryProps {
   path: string[];
   currentPath: string;
 }
 
-async function Directory({ path, currentPath }: DirectoryProps) {
+async function Directory({ currentPath }: DirectoryProps) {
   const files = await getFiles(currentPath);
 
   const filesToShow = files.filter((file) => !file.hidden);
 
   return (
-    <Wrapper path={path}>
-      <div className="flex flex-col bg-white rounded-md shadow-md">
-        <ul className="divide-y divide-gray-200">
-          {filesToShow.map((file) => (
-            <FileItem
-              key={file.path}
-              name={file.name}
-              access={file.access}
-              hidden={file.hidden}
-              type={file.type}
-              path={file.path}
-            />
-          ))}
-        </ul>
-      </div>
-    </Wrapper>
+    <div className="flex flex-col bg-white rounded-md shadow-md">
+      <ul className="divide-y divide-gray-200">
+        {filesToShow.map((file) => (
+          <FileItem
+            key={file.path}
+            name={file.name}
+            access={file.access}
+            hidden={file.hidden}
+            type={file.type}
+            path={file.path}
+          />
+        ))}
+      </ul>
+    </div>
   );
 }
 
-interface UnknownProps {
-  path: string[];
-}
-
-function Unknown({ path }: UnknownProps) {
+function Unknown() {
   return (
-    <Wrapper path={path}>
-      <div className="flex flex-col bg-white rounded-md shadow-md">
-        <div className="flex items-center justify-center flex-1 p-8 text-gray-800">
-          <p className="text-2xl font-bold">File not found</p>
-        </div>
+    <div className="flex flex-col bg-white rounded-md shadow-md">
+      <div className="flex items-center justify-center flex-1 p-8 text-gray-800">
+        <p className="text-2xl font-bold">File not found</p>
       </div>
-    </Wrapper>
+    </div>
   );
 }
 
@@ -120,16 +95,24 @@ function TextFile({ file }: { file: MyFile & { content: string } }) {
   );
 }
 
-function ImageFile({ file }: { file: MyFile & { content: string } }) {
-  return <img src={`data:image/${file.extension};base64,${file.content}`} />;
+function ImageFile({ currentPath }: { currentPath: string }) {
+  return (
+    <div className="w-full h-full relative">
+      <Image
+        src={`/image?path=${currentPath}`}
+        style={{ objectFit: "contain" }}
+        alt=""
+        fill
+      />
+    </div>
+  );
 }
 
 interface FileProps {
-  path: string[];
   currentPath: string;
 }
 
-async function File({ path, currentPath }: FileProps) {
+async function File({ currentPath }: FileProps) {
   const dir = currentPath.split("/").slice(0, -1).join("/");
   const filename = currentPath.split("/").pop();
 
@@ -140,22 +123,17 @@ async function File({ path, currentPath }: FileProps) {
   const file = await getFile(dir, filename);
 
   return (
-    <Wrapper path={path}>
-      <div className="flex flex-col bg-white rounded-md shadow-md">
-        <div className="flex items-center justify-center flex-1 p-8 text-gray-800">
-          <p className="text-2xl font-bold">File</p>
-        </div>
-      </div>
+    <>
       {textExtensions.has(file.extension ?? "") && file.content ? (
         <TextFile file={file} />
       ) : imageExtensions.has(file.extension ?? "") && file.content ? (
-        <ImageFile file={file} />
+        <ImageFile currentPath={currentPath} />
       ) : (
         <pre>
           <code>file: {JSON.stringify(file, null, 2)}</code>
         </pre>
       )}
-    </Wrapper>
+    </>
   );
 }
 
@@ -171,14 +149,32 @@ export default async function Page({ params }: PageProps) {
   const currentPath = getPath(path ?? []);
   const fileType = await getFileType(currentPath);
 
+  let content: React.ReactNode;
   switch (fileType) {
     case "unknown":
-      return <Unknown path={path} />;
+      content = <Unknown />;
+      break;
     case "file":
       // @ts-expect-error
-      return <File path={path} currentPath={currentPath} />;
+      content = <File currentPath={currentPath} />;
+      break;
     case "directory":
       // @ts-expect-error
-      return <Directory path={path} currentPath={currentPath} />;
+      content = <Directory currentPath={currentPath} />;
+      break;
   }
+
+  return (
+    <main className="flex flex-col min-h-screen h-full p-8 bg-gray-50">
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-4xl font-bold text-gray-800">File Navigator App</h1>
+        <div className="px-4 py-2 font-medium text-white bg-gray-800 rounded-md hover:bg-gray-700">
+          {currentPath?.length > 0
+            ? currentPath.replace(homedir(), "~")
+            : "Home"}
+        </div>
+      </div>
+      {content}
+    </main>
+  );
 }
