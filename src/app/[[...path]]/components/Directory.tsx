@@ -14,6 +14,19 @@ export async function getFiles(path: string) {
   return filesWithTypes;
 }
 
+type LinkWrapperProps = Pick<
+  Awaited<ReturnType<typeof getFileData>>,
+  "access" | "path"
+> & { children: React.ReactNode };
+
+function LinkWrapper({ path, access, children }: LinkWrapperProps) {
+  if (access) {
+    return <Link href={path}>{children}</Link>;
+  }
+
+  return <>{children}</>;
+}
+
 type FileItemProps = Pick<
   Awaited<ReturnType<typeof getFileData>>,
   "name" | "access" | "hidden" | "type" | "path"
@@ -21,28 +34,25 @@ type FileItemProps = Pick<
 
 function FileItem({ name, access, hidden, type, path }: FileItemProps) {
   return (
-    <Link href={path}>
-      <li
-        className={clsx(
-          access && "cursor-pointer hover:bg-gray-100",
-          hidden && "opacity-50"
-        )}
-      >
+    <li
+      className={clsx(
+        "hover:bg-gray-100",
+        !access && "cursor-not-allowed opacity-50",
+        hidden && "opacity-50"
+      )}
+    >
+      <LinkWrapper access={access} path={path}>
         <div className="flex items-center px-4 py-2">
-          <span className="text-gray-800 mr-auto">{name}</span>
-          <span className="flex text-sm text-gray-500">
-            <Icon
-              name={access ? "lock-open" : "lock-closed"}
-              className="text-gray-500 mr-2"
-            />
+          <span className="mr-auto flex text-gray-800">
             <Icon
               name={type === "directory" ? "folder" : "file"}
               className="text-gray-500 mr-2"
             />
+            {name}
           </span>
         </div>
-      </li>
-    </Link>
+      </LinkWrapper>
+    </li>
   );
 }
 
@@ -58,7 +68,7 @@ export async function Directory({ currentPath }: DirectoryProps) {
 
   return (
     <div className="flex flex-col bg-white rounded-md shadow-md">
-      <ul className="divide-y divide-gray-200">
+      <ul>
         {filesToShow.map((file) => (
           <FileItem
             key={file.path}

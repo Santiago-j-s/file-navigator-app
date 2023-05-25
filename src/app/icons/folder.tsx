@@ -4,7 +4,7 @@ interface FolderProps {
   className?: string;
 }
 
-const Folder = ({ className }: FolderProps) => (
+export const Folder = ({ className }: FolderProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
@@ -20,5 +20,3 @@ const Folder = ({ className }: FolderProps) => (
     />
   </svg>
 );
-
-export default Folder;

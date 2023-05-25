@@ -1,5 +1,5 @@
 import { FileIcon } from "./file";
-import Folder from "./folder";
+import { Folder } from "./folder";
 import { LockClosed } from "./lock-closed";
 import { LockOpen } from "./lock-open";
 
