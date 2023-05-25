@@ -5,8 +5,7 @@ import Link from "next/link";
 import { homedir } from "os";
 import Icon from "../icons/Icon";
 import {
-  FileType,
-  getFile,
+  getFileData,
   getFileType,
   getFiles,
   getPath,
@@ -15,13 +14,7 @@ import {
   videoExtensions,
 } from "../services";
 
-interface FileItemProps {
-  name: string;
-  access: boolean;
-  hidden: boolean;
-  type: FileType;
-  path: string;
-}
+type FileItemProps = Awaited<ReturnType<typeof getFileData>>;
 
 function FileItem({ name, access, hidden, type, path }: FileItemProps) {
   return (
@@ -71,6 +64,8 @@ async function Directory({ currentPath }: DirectoryProps) {
             hidden={file.hidden}
             type={file.type}
             path={file.path}
+            extension={file.extension}
+            mimeType={file.mimeType}
           />
         ))}
       </ul>
@@ -111,11 +106,21 @@ function ImageFile({ currentPath }: { currentPath: string }) {
   );
 }
 
-function VideoFile({ currentPath }: { currentPath: string }) {
+function VideoFile({
+  currentPath,
+  mimeType,
+}: {
+  currentPath: string;
+  mimeType: string | null;
+}) {
+  if (!mimeType) {
+    throw new Error(`Mime type not found: ${currentPath}`);
+  }
+
   return (
     <div className="w-full h-full relative">
       <video controls>
-        <source src={`/video?path=${currentPath}`} type="video/mp4" />
+        <source src={`/video?path=${currentPath}`} type={mimeType} />
       </video>
     </div>
   );
@@ -133,7 +138,7 @@ async function File({ currentPath }: FileProps) {
     throw new Error(`Filename not found: ${currentPath}`);
   }
 
-  const file = await getFile(dir, filename);
+  const file = await getFileData(dir, filename);
 
   return (
     <>
@@ -143,7 +148,7 @@ async function File({ currentPath }: FileProps) {
       ) : imageExtensions.has(file.extension ?? "") ? (
         <ImageFile currentPath={currentPath} />
       ) : videoExtensions.has(file.extension ?? "") ? (
-        <VideoFile currentPath={currentPath} />
+        <VideoFile currentPath={currentPath} mimeType={file.mimeType} />
       ) : (
         <pre>
           <code>file: {JSON.stringify(file, null, 2)}</code>

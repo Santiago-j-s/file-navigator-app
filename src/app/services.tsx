@@ -5,15 +5,6 @@ import { join } from "path";
 
 export type FileType = "file" | "directory" | "unknown";
 
-export interface MyFile {
-  name: string;
-  access: boolean;
-  type: FileType;
-  hidden: boolean;
-  extension?: string | null;
-  path: string;
-}
-
 export function getPath(slug: string[]) {
   const homepath = homedir();
 
@@ -45,16 +36,43 @@ export const textExtensions = new Set(["txt", "md", "js", "json"]);
 export const imageExtensions = new Set(["png", "jpg", "jpeg", "gif"]);
 export const videoExtensions = new Set(["mp4", "webm", "ogg", "mov"]);
 
-export async function getFile(dir: string, filename: string) {
-  const fileData = await getFileData(dir, filename);
+export function getMimeType(filename: string) {
+  const extension = filename.split(".").pop();
 
-  return {
-    ...fileData,
-    content: null,
-  };
+  if (!extension) {
+    return null;
+  }
+
+  switch (extension) {
+    case "txt":
+      return "text/plain";
+    case "md":
+      return "text/markdown";
+    case "js":
+      return "text/javascript";
+    case "json":
+      return "application/json";
+    case "png":
+      return "image/png";
+    case "jpg":
+    case "jpeg":
+      return "image/jpeg";
+    case "gif":
+      return "image/gif";
+    case "mp4":
+      return "video/mp4";
+    case "webm":
+      return "video/webm";
+    case "ogg":
+      return "video/ogg";
+    case "mov":
+      return "video/quicktime";
+    default:
+      return null;
+  }
 }
 
-async function getFileData(dir: string, filename: string) {
+export async function getFileData(dir: string, filename: string) {
   const filePath = join(dir, filename);
   const filePathWithoutHome = filePath.replace(homedir(), "");
 
@@ -67,10 +85,11 @@ async function getFileData(dir: string, filename: string) {
     type: await getFileType(filePath),
     hidden: filename.startsWith("."),
     extension: filename.split(".").pop(),
+    mimeType: getMimeType(filename),
   };
 }
 
-export async function getFiles(path: string): Promise<MyFile[]> {
+export async function getFiles(path: string) {
   const files = await readdir(path);
 
   const filesWithTypes = await Promise.all(
