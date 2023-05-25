@@ -29,7 +29,7 @@ export async function GET(request: Request) {
   const stats = await stat(path);
   const img = await readFile(path);
 
-  return new Response(img, {
+  return new NextResponse(img, {
     headers: {
       "Content-Type": getContentType(path),
       "Content-Length": stats.size.toString(),

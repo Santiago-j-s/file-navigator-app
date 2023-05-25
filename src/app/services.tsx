@@ -1,5 +1,5 @@
 import { Stats } from "fs";
-import { access, readFile, readdir, stat } from "fs/promises";
+import { access, readdir, stat } from "fs/promises";
 import { homedir } from "os";
 import { join } from "path";
 
@@ -43,25 +43,10 @@ export async function getFileType(file: string): Promise<FileType> {
 
 export const textExtensions = new Set(["txt", "md", "js", "json"]);
 export const imageExtensions = new Set(["png", "jpg", "jpeg", "gif"]);
+export const videoExtensions = new Set(["mp4", "webm", "ogg", "mov"]);
 
 export async function getFile(dir: string, filename: string) {
   const fileData = await getFileData(dir, filename);
-
-  // read txt
-  if (fileData.extension && textExtensions.has(fileData.extension)) {
-    return {
-      ...fileData,
-      content: await readFile(join(dir, filename), "utf-8"),
-    };
-  }
-
-  // read image
-  if (fileData.extension && imageExtensions.has(fileData.extension)) {
-    return {
-      ...fileData,
-      content: await readFile(join(dir, filename), "base64"),
-    };
-  }
 
   return {
     ...fileData,

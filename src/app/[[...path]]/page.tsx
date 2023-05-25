@@ -1,17 +1,18 @@
 import clsx from "clsx";
+import { readFile } from "fs/promises";
 import Image from "next/image";
 import Link from "next/link";
 import { homedir } from "os";
 import Icon from "../icons/Icon";
 import {
   FileType,
-  MyFile,
   getFile,
   getFileType,
   getFiles,
   getPath,
   imageExtensions,
   textExtensions,
+  videoExtensions,
 } from "../services";
 
 interface FileItemProps {
@@ -87,10 +88,12 @@ function Unknown() {
   );
 }
 
-function TextFile({ file }: { file: MyFile & { content: string } }) {
+async function TextFile({ currentPath }: { currentPath: string }) {
+  const content = await readFile(currentPath, "utf-8");
+
   return (
     <pre>
-      <code>{file.content}</code>
+      <code>{content}</code>
     </pre>
   );
 }
@@ -104,6 +107,16 @@ function ImageFile({ currentPath }: { currentPath: string }) {
         alt=""
         fill
       />
+    </div>
+  );
+}
+
+function VideoFile({ currentPath }: { currentPath: string }) {
+  return (
+    <div className="w-full h-full relative">
+      <video controls>
+        <source src={`/video?path=${currentPath}`} type="video/mp4" />
+      </video>
     </div>
   );
 }
@@ -124,10 +137,13 @@ async function File({ currentPath }: FileProps) {
 
   return (
     <>
-      {textExtensions.has(file.extension ?? "") && file.content ? (
-        <TextFile file={file} />
-      ) : imageExtensions.has(file.extension ?? "") && file.content ? (
+      {textExtensions.has(file.extension ?? "") ? (
+        /** @ts-expect-error */
+        <TextFile currentPath={currentPath} />
+      ) : imageExtensions.has(file.extension ?? "") ? (
         <ImageFile currentPath={currentPath} />
+      ) : videoExtensions.has(file.extension ?? "") ? (
+        <VideoFile currentPath={currentPath} />
       ) : (
         <pre>
           <code>file: {JSON.stringify(file, null, 2)}</code>
