@@ -7,7 +7,7 @@ export const imageExtensions = new Set(["png", "jpg", "jpeg", "gif"]);
 export const videoExtensions = new Set(["mp4", "webm", "ogg", "mov"]);
 
 async function TextFile({ currentPath }: { currentPath: string }) {
-  const mimeType = await getMimeType(currentPath);
+  const mimeType = getMimeType(currentPath);
   const content = await readFile(currentPath, "utf-8");
 
   let contentPrettified = content;
@@ -64,8 +64,10 @@ interface FileProps {
 }
 
 export async function File({ currentPath }: FileProps) {
-  const dir = currentPath.split("/").slice(0, -1).join("/");
-  const filename = currentPath.split("/").pop();
+  const parts = currentPath.split("/");
+
+  const filename = parts.pop();
+  const dir = parts.join("/");
 
   if (!filename) {
     throw new Error(`Filename not found: ${currentPath}`);

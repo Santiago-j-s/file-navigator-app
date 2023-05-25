@@ -4,22 +4,6 @@ import { Directory } from "./components/Directory";
 import { File } from "./components/File";
 import { getFileType } from "./services";
 
-export function getPath(slug: string[]) {
-  const homepath = homedir();
-
-  return join(homepath, decodeURIComponent(slug.join("/")));
-}
-
-function Unknown() {
-  return (
-    <div className="flex flex-col bg-white rounded-md shadow-md">
-      <div className="flex items-center justify-center flex-1 p-8 text-gray-800">
-        <p className="text-2xl font-bold">File not found</p>
-      </div>
-    </div>
-  );
-}
-
 interface PageProps {
   params: {
     path: string[];
@@ -29,13 +13,22 @@ interface PageProps {
 export default async function Page({ params }: PageProps) {
   const { path } = params;
 
-  const currentPath = getPath(path ?? []);
+  const currentPath = join(
+    homedir(),
+    decodeURIComponent(path?.join("/") ?? [])
+  );
   const fileType = await getFileType(currentPath);
 
   let content: React.ReactNode;
   switch (fileType) {
     case "unknown":
-      content = <Unknown />;
+      content = (
+        <div className="flex flex-col bg-white rounded-md shadow-md">
+          <div className="flex items-center justify-center flex-1 p-8 text-gray-800">
+            <p className="text-2xl font-bold">File not found</p>
+          </div>
+        </div>
+      );
       break;
     case "file":
       // @ts-expect-error
@@ -52,9 +45,7 @@ export default async function Page({ params }: PageProps) {
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-4xl font-bold text-gray-800">File Navigator App</h1>
         <div className="px-4 py-2 font-medium text-white bg-gray-800 rounded-md hover:bg-gray-700">
-          {currentPath?.length > 0
-            ? currentPath.replace(homedir(), "~")
-            : "Home"}
+          {currentPath.replace(homedir(), "~")}
         </div>
       </div>
       {content}

@@ -4,16 +4,6 @@ import Link from "next/link";
 import Icon from "../../icons/Icon";
 import { getFileData } from "../services";
 
-export async function getFiles(path: string) {
-  const files = await readdir(path);
-
-  const filesWithTypes = await Promise.all(
-    files.map((file) => getFileData(path, file))
-  );
-
-  return filesWithTypes;
-}
-
 type LinkWrapperProps = Pick<
   Awaited<ReturnType<typeof getFileData>>,
   "access" | "path"
@@ -62,9 +52,13 @@ interface DirectoryProps {
 }
 
 export async function Directory({ currentPath }: DirectoryProps) {
-  const files = await getFiles(currentPath);
+  const files = await readdir(currentPath);
 
-  const filesToShow = files.filter((file) => !file.hidden);
+  const filesWithTypes = await Promise.all(
+    files.map((file) => getFileData(currentPath, file))
+  );
+
+  const filesToShow = filesWithTypes.filter((file) => !file.hidden);
 
   return (
     <div className="flex flex-col bg-white rounded-md shadow-md">
