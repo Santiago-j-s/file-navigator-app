@@ -1,15 +1,9 @@
 import { Stats } from "fs";
-import { access, readdir, stat } from "fs/promises";
+import { access, stat } from "fs/promises";
 import { homedir } from "os";
 import { join } from "path";
 
 export type FileType = "file" | "directory" | "unknown";
-
-export function getPath(slug: string[]) {
-  const homepath = homedir();
-
-  return join(homepath, decodeURIComponent(slug.join("/")));
-}
 
 export async function getFileType(file: string): Promise<FileType> {
   let stats: Stats;
@@ -31,10 +25,6 @@ export async function getFileType(file: string): Promise<FileType> {
 
   return "unknown";
 }
-
-export const textExtensions = new Set(["txt", "md", "js", "json"]);
-export const imageExtensions = new Set(["png", "jpg", "jpeg", "gif"]);
-export const videoExtensions = new Set(["mp4", "webm", "ogg", "mov"]);
 
 export function getMimeType(filename: string) {
   const extension = filename.split(".").pop();
@@ -87,14 +77,4 @@ export async function getFileData(dir: string, filename: string) {
     extension: filename.split(".").pop(),
     mimeType: getMimeType(filename),
   };
-}
-
-export async function getFiles(path: string) {
-  const files = await readdir(path);
-
-  const filesWithTypes = await Promise.all(
-    files.map((file) => getFileData(path, file))
-  );
-
-  return filesWithTypes;
 }

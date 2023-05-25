@@ -45,6 +45,8 @@ export async function GET(request: Request) {
 
   const video = Readable.toWeb(createReadStream(path, { start, end }));
 
+  // @ts-expect-error - ts doesn't believe that a nodejs ReadableStream is a valid web ReadableStream
+  // maybe ts is right but it works well enough for this example
   return new NextResponse(video, {
     body: video,
     status: 206,
