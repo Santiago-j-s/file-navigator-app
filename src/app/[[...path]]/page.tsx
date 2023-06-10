@@ -2,6 +2,8 @@ import { homedir } from "os";
 import { join } from "path";
 import { Directory } from "./components/Directory";
 import { File } from "./components/File";
+import { HideFilesButton } from "./components/HideFilesButton";
+import { FilesProvider } from "./filesContext";
 import { getFileType } from "./services";
 
 interface PageProps {
@@ -41,14 +43,19 @@ export default async function Page({ params }: PageProps) {
   }
 
   return (
-    <main className="flex flex-col min-h-screen h-full p-8 bg-gray-50">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-4xl font-bold text-gray-800">File Navigator App</h1>
-        <div className="px-4 py-2 font-medium text-white bg-gray-800 rounded-md hover:bg-gray-700">
-          {currentPath.replace(homedir(), "~")}
+    <FilesProvider>
+      <main className="flex flex-col min-h-screen h-full p-8 bg-gray-50 gap-4">
+        <div className="flex items-center justify-between mb-4">
+          <h1 className="text-4xl font-bold text-gray-800">
+            File Navigator App
+          </h1>
+          <div className="px-4 py-2 font-medium text-white bg-gray-800 rounded-md hover:bg-gray-700">
+            {currentPath.replace(homedir(), "~")}
+          </div>
         </div>
-      </div>
-      {content}
-    </main>
+        {fileType === "directory" && <HideFilesButton />}
+        {content}
+      </main>
+    </FilesProvider>
   );
 }

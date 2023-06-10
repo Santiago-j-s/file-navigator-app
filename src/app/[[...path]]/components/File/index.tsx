@@ -1,8 +1,8 @@
 import { readFile } from "fs/promises";
 import Image from "next/image";
-import { getFileData, getMimeType } from "../services";
+import { getFileData, getMimeType } from "../../services";
 
-export const textExtensions = new Set(["txt", "md", "js", "json", "sql"]);
+export const textExtensions = new Set(["txt", "md", "js", "json", "sql", "ts"]);
 export const imageExtensions = new Set(["png", "jpg", "jpeg", "gif"]);
 export const videoExtensions = new Set(["mp4", "webm", "ogg", "mov"]);
 
@@ -20,7 +20,7 @@ async function TextFile({ currentPath }: { currentPath: string }) {
   }
 
   return (
-    <pre className="whitespace-pre-wrap">
+    <pre className="bg-gray-800 rounded-md text-gray-300 p-8 whitespace-pre-wrap">
       <code>{contentPrettified}</code>
     </pre>
   );

@@ -1,5 +1,5 @@
 import { Stats } from "fs";
-import { access, stat } from "fs/promises";
+import { access, readdir, stat } from "fs/promises";
 import { homedir } from "os";
 import { join } from "path";
 
@@ -27,7 +27,7 @@ export async function getFileType(file: string): Promise<FileType> {
 }
 
 export function getMimeType(filename: string) {
-  const extension = filename.split(".").pop();
+  const extension = getExtension(filename);
 
   if (!extension) {
     return null;
@@ -62,6 +62,23 @@ export function getMimeType(filename: string) {
   }
 }
 
+function isHidden(filename: string) {
+  return filename.startsWith(".");
+}
+
+function getExtension(filename: string) {
+  if (!filename.includes(".")) {
+    return null;
+  }
+
+  // if a hidden file has only one dot, it's not a file extension
+  if (filename.startsWith(".") && filename.split(".").length === 2) {
+    return null;
+  }
+
+  return filename.split(".").pop();
+}
+
 export async function getFileData(dir: string, filename: string) {
   const filePath = join(dir, filename);
   const filePathWithoutHome = filePath.replace(homedir(), "");
@@ -73,8 +90,16 @@ export async function getFileData(dir: string, filename: string) {
       .then(() => true)
       .catch(() => false),
     type: await getFileType(filePath),
-    hidden: filename.startsWith("."),
-    extension: filename.split(".").pop(),
+    hidden: isHidden(filename),
+    extension: getExtension(filename),
     mimeType: getMimeType(filename),
   };
+}
+
+export type FileData = ReturnType<typeof getFileData>;
+
+export async function getFiles(dir: string) {
+  const files = await readdir(dir);
+
+  return Promise.all(files.map((file) => getFileData(dir, file)));
 }
