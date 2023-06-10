@@ -33,9 +33,10 @@ export function FileItem({ name, access, hidden, type, path }: FileItemProps) {
   return (
     <li
       className={clsx(
-        "hover:bg-gray-100",
+        "hover:bg-gray-100 overflow-hidden",
         !access && "cursor-not-allowed opacity-50"
       )}
+      title={`${type === "directory" ? "Directory" : "File"}: ${name}`}
     >
       <LinkWrapper access={access} path={path}>
         <div className="flex items-center px-4 py-2">

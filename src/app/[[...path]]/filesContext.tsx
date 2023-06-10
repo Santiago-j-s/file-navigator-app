@@ -10,12 +10,16 @@ import {
 
 export interface FilesState {
   showHiddenFiles: boolean;
+  showItemsAs: "list" | "grid";
 }
 
-export type FilesAction = { type: "SHOW_HIDDEN_FILES"; payload: boolean };
+export type FilesAction =
+  | { type: "SHOW_HIDDEN_FILES"; payload: boolean }
+  | { type: "SHOW_ITEMS_AS"; payload: "list" | "grid" };
 
 const initialState: FilesState = {
   showHiddenFiles: false,
+  showItemsAs: "list",
 };
 
 const FilesContext = createContext<{
@@ -23,13 +27,18 @@ const FilesContext = createContext<{
   dispatch: Dispatch<FilesAction>;
 } | null>(null);
 
-function filesReducer(state: FilesState, action: FilesAction) {
+function filesReducer(state: FilesState, action: FilesAction): FilesState {
   switch (action.type) {
     case "SHOW_HIDDEN_FILES": {
       return { ...state, showHiddenFiles: action.payload };
     }
 
+    case "SHOW_ITEMS_AS": {
+      return { ...state, showItemsAs: action.payload };
+    }
+
     default: {
+      // @ts-expect-error
       throw new Error(`Unhandled action type: ${action.type}`);
     }
   }
