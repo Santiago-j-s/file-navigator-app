@@ -11,7 +11,13 @@ interface DirectoryProps {
 export function Directory({ files }: DirectoryProps) {
   const { state } = useFiles();
 
-  const fileItems = files.map((file) => (
+  const filteredFiles = files.filter((file) => {
+    if (!state.filter) return true;
+
+    return file.name.toLowerCase().includes(state.filter.toLowerCase());
+  });
+
+  const fileItems = filteredFiles.map((file) => (
     <FileItem
       key={file.path}
       name={file.name}

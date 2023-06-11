@@ -3,6 +3,10 @@ import { access, readdir, stat } from "fs/promises";
 import { homedir } from "os";
 import { join } from "path";
 
+const textExtensions = new Set(["txt", "md", "js", "json", "sql", "ts"]);
+const imageExtensions = new Set(["png", "jpg", "jpeg", "gif"]);
+const videoExtensions = new Set(["mp4", "webm", "ogg", "mov"]);
+
 export type FileType = "file" | "directory" | "unknown";
 
 export async function getFileType(file: string): Promise<FileType> {
@@ -26,7 +30,20 @@ export async function getFileType(file: string): Promise<FileType> {
   return "unknown";
 }
 
-export function getMimeType(filename: string) {
+export type MimeTypes =
+  | "text/plain"
+  | "text/markdown"
+  | "text/javascript"
+  | "application/json"
+  | "image/png"
+  | "image/jpeg"
+  | "image/gif"
+  | "video/mp4"
+  | "video/webm"
+  | "video/ogg"
+  | "video/quicktime";
+
+export function getMimeType(filename: string): MimeTypes | null {
   const extension = getExtension(filename);
 
   if (!extension) {
@@ -83,20 +100,63 @@ export async function getFileData(dir: string, filename: string) {
   const filePath = join(dir, filename);
   const filePathWithoutHome = filePath.replace(homedir(), "");
 
-  return {
-    name: filename,
-    path: filePathWithoutHome,
-    access: await access(filePath)
-      .then(() => true)
-      .catch(() => false),
-    type: await getFileType(filePath),
-    hidden: isHidden(filename),
-    extension: getExtension(filename),
-    mimeType: getMimeType(filename),
-  };
+  const canOpen = await access(filePath)
+    .then(() => true)
+    .catch(() => false);
+
+  const type = await getFileType(filePath);
+
+  if (type === "directory" || type === "unknown") {
+    return {
+      name: filename,
+      path: filePathWithoutHome,
+      access: canOpen,
+      type,
+      hidden: isHidden(filename),
+    };
+  }
+
+  const extension = getExtension(filename);
+
+  if (type === "file") {
+    return {
+      name: filename,
+      path: filePathWithoutHome,
+      access: canOpen,
+      type,
+      hidden: isHidden(filename),
+      extension,
+      mimeType: getMimeType(filename),
+      openAs: openAs(extension),
+    };
+  }
+
+  throw new Error(`Invalid filetype: ${type}`);
 }
 
 export type FileData = ReturnType<typeof getFileData>;
+
+function openAs(
+  extension?: string | null
+): "none" | "text" | "image" | "video" {
+  if (!extension) {
+    return "none";
+  }
+
+  if (textExtensions.has(extension)) {
+    return "text";
+  }
+
+  if (imageExtensions.has(extension)) {
+    return "image";
+  }
+
+  if (videoExtensions.has(extension)) {
+    return "video";
+  }
+
+  return "none";
+}
 
 export async function getFiles(dir: string) {
   const files = await readdir(dir);

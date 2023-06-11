@@ -1,25 +1,28 @@
 "use client";
 
 import {
-  Dispatch,
   createContext,
   useContext,
   useMemo,
   useReducer,
+  type Dispatch,
 } from "react";
 
 export interface FilesState {
   showHiddenFiles: boolean;
   showItemsAs: "list" | "grid";
+  filter: string;
 }
 
 export type FilesAction =
   | { type: "SHOW_HIDDEN_FILES"; payload: boolean }
-  | { type: "SHOW_ITEMS_AS"; payload: "list" | "grid" };
+  | { type: "SHOW_ITEMS_AS"; payload: "list" | "grid" }
+  | { type: "FILTER"; payload: string };
 
 const initialState: FilesState = {
   showHiddenFiles: false,
   showItemsAs: "list",
+  filter: "",
 };
 
 const FilesContext = createContext<{
@@ -35,6 +38,10 @@ function filesReducer(state: FilesState, action: FilesAction): FilesState {
 
     case "SHOW_ITEMS_AS": {
       return { ...state, showItemsAs: action.payload };
+    }
+
+    case "FILTER": {
+      return { ...state, filter: action.payload };
     }
 
     default: {

@@ -1,3 +1,4 @@
+import { ArrowLeft } from "./arrow-left";
 import { Eye } from "./eye";
 import { EyeSlash } from "./eye-slash";
 import { FileIcon } from "./file";
@@ -16,7 +17,8 @@ interface IconProps {
     | "eye"
     | "eye-slash"
     | "grid"
-    | "list";
+    | "list"
+    | "arrow-left";
   className?: string;
 }
 
@@ -45,6 +47,9 @@ export default function Icon({ name, className }: IconProps) {
 
     case "list":
       return <List className={className} />;
+
+    case "arrow-left":
+      return <ArrowLeft className={className} />;
 
     default:
       throw new Error(`Icon "${name}" not found`);

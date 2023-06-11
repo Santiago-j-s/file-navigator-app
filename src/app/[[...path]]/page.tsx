@@ -1,6 +1,7 @@
+import type { Metadata, ResolvingMetadata } from "next";
 import { homedir } from "os";
 import { join } from "path";
-import { Buttons } from "./components/Buttons";
+import { ActionBar } from "./components/ActionBar";
 import { Directory } from "./components/Directory";
 import { File } from "./components/File";
 import { FilesProvider } from "./filesContext";
@@ -39,6 +40,22 @@ interface PageProps {
   };
 }
 
+export async function generateMetadata(
+  { params }: PageProps,
+  parent?: ResolvingMetadata
+): Promise<Metadata> {
+  const { path } = params;
+
+  const currentPath = join(
+    homedir(),
+    decodeURIComponent(path?.join("/") ?? [])
+  );
+
+  return {
+    title: currentPath.replace(homedir(), "~"),
+  };
+}
+
 export default async function Page({ params }: PageProps) {
   const { path } = params;
 
@@ -51,16 +68,11 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <FilesProvider>
-      <main className="flex flex-col min-h-screen p-8 bg-gray-50 gap-4">
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-4xl font-bold text-gray-800">
-            File Navigator App
-          </h1>
-          <div className="px-4 py-2 font-medium text-white bg-gray-800 rounded-md hover:bg-gray-700">
-            {currentPath.replace(homedir(), "~")}
-          </div>
-        </div>
-        {fileType === "directory" && <Buttons />}
+      <main className="flex flex-col min-h-screen h-full overflow-scroll p-8 bg-gray-50 gap-4">
+        <ActionBar
+          title={currentPath.replace(homedir(), "~")}
+          fileType={fileType}
+        />
         {/** @ts-expect-error */}
         <PageContent fileType={fileType} currentPath={currentPath} />
       </main>

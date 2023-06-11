@@ -2,10 +2,6 @@ import { readFile } from "fs/promises";
 import Image from "next/image";
 import { getFileData, getMimeType } from "../../services";
 
-export const textExtensions = new Set(["txt", "md", "js", "json", "sql", "ts"]);
-export const imageExtensions = new Set(["png", "jpg", "jpeg", "gif"]);
-export const videoExtensions = new Set(["mp4", "webm", "ogg", "mov"]);
-
 async function TextFile({ currentPath }: { currentPath: string }) {
   const mimeType = getMimeType(currentPath);
   const content = await readFile(currentPath, "utf-8");
@@ -75,18 +71,24 @@ export async function File({ currentPath }: FileProps) {
 
   const file = await getFileData(dir, filename);
 
-  if (textExtensions.has(file.extension ?? "")) {
+  if (file.type !== "file") {
+    throw new Error(
+      `File component only works with files, not with ${file.type}`
+    );
+  }
+
+  if (file.openAs === "text") {
     return (
       /** @ts-expect-error */
       <TextFile currentPath={currentPath} />
     );
   }
 
-  if (imageExtensions.has(file.extension ?? "")) {
+  if (file.openAs === "image") {
     return <ImageFile currentPath={currentPath} />;
   }
 
-  if (videoExtensions.has(file.extension ?? "")) {
+  if (file.openAs === "video") {
     return <VideoFile currentPath={currentPath} mimeType={file.mimeType} />;
   }
 
