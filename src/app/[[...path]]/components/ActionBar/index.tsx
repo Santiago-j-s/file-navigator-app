@@ -1,7 +1,7 @@
 "use client";
 
 import Icon from "@/app/icons/Icon";
-import { useFiles } from "../../filesContext";
+import { useFiles } from "../../../filesContext";
 import type { FileType } from "../../services";
 
 interface ActionBarProps {

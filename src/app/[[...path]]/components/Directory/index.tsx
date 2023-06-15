@@ -1,6 +1,6 @@
 "use client";
 
-import { useFiles } from "../../filesContext";
+import { useFiles } from "../../../filesContext";
 import type { FileData } from "../../services";
 import { FileItem } from "./FileItem";
 

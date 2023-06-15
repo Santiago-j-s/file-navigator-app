@@ -2,8 +2,8 @@
 
 import clsx from "clsx";
 import Link from "next/link";
+import { useFiles } from "../../../filesContext";
 import Icon from "../../../icons/Icon";
-import { useFiles } from "../../filesContext";
 import type { FileData } from "../../services";
 
 type LinkWrapperProps = Pick<Awaited<FileData>, "access" | "path"> & {

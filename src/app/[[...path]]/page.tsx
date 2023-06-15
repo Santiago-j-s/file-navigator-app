@@ -4,7 +4,6 @@ import { join } from "path";
 import { ActionBar } from "./components/ActionBar";
 import { Directory } from "./components/Directory";
 import { File } from "./components/File";
-import { FilesProvider } from "./filesContext";
 import { getFileType, getFiles } from "./services";
 
 type PageContentProps =
@@ -67,15 +66,13 @@ export default async function Page({ params }: PageProps) {
   const fileType = await getFileType(currentPath);
 
   return (
-    <FilesProvider>
-      <main className="flex flex-col min-h-screen h-full overflow-scroll p-8 bg-gray-50 gap-4">
-        <ActionBar
-          title={currentPath.replace(homedir(), "~")}
-          fileType={fileType}
-        />
-        {/** @ts-expect-error */}
-        <PageContent fileType={fileType} currentPath={currentPath} />
-      </main>
-    </FilesProvider>
+    <main className="flex flex-col min-h-screen h-full overflow-scroll p-8 bg-gray-50 gap-4">
+      <ActionBar
+        title={currentPath.replace(homedir(), "~")}
+        fileType={fileType}
+      />
+      {/** @ts-expect-error */}
+      <PageContent fileType={fileType} currentPath={currentPath} />
+    </main>
   );
 }
