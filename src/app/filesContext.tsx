@@ -5,8 +5,11 @@ import {
   useContext,
   useMemo,
   useReducer,
+  useEffect,
   type Dispatch,
 } from "react";
+
+import { usePathname } from "next/navigation";
 
 export interface FilesState {
   showHiddenFiles: boolean;
@@ -57,6 +60,12 @@ interface FilesProviderProps {
 
 function FilesProvider({ children }: FilesProviderProps) {
   const [state, dispatch] = useReducer(filesReducer, initialState);
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    dispatch({ type: "FILTER", payload: "" });
+  }, [pathname]);
 
   // Memoize the context value to prevent unnecessary re-renders
   // in consumers that only use the dispatch and not the state itself.
