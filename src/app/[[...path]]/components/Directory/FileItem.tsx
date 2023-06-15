@@ -33,7 +33,7 @@ export function FileItem({ name, access, hidden, type, path }: FileItemProps) {
   return (
     <li
       className={clsx(
-        "hover:bg-gray-100 overflow-hidden",
+        "hover:bg-gray-100 overflow-hidden focus-within:bg-gray-100",
         !access && "cursor-not-allowed opacity-50"
       )}
       title={`${type === "directory" ? "Directory" : "File"}: ${name}`}
