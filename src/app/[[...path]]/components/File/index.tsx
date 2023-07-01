@@ -47,8 +47,8 @@ function VideoFile({
   }
 
   return (
-    <div className="w-full h-full relative">
-      <video controls>
+    <div className="flex justify-center relative">
+      <video controls className="h-full max-h-[720px]">
         <source src={`/video?path=${currentPath}`} type={mimeType} />
       </video>
     </div>

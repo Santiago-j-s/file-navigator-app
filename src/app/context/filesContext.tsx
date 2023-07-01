@@ -3,28 +3,21 @@
 import {
   createContext,
   useContext,
+  useEffect,
   useMemo,
   useReducer,
-  useEffect,
   type Dispatch,
 } from "react";
 
 import { usePathname } from "next/navigation";
 
 export interface FilesState {
-  showHiddenFiles: boolean;
-  showItemsAs: "list" | "grid";
   filter: string;
 }
 
-export type FilesAction =
-  | { type: "SHOW_HIDDEN_FILES"; payload: boolean }
-  | { type: "SHOW_ITEMS_AS"; payload: "list" | "grid" }
-  | { type: "FILTER"; payload: string };
+export type FilesAction = { type: "FILTER"; payload: string };
 
 const initialState: FilesState = {
-  showHiddenFiles: false,
-  showItemsAs: "list",
   filter: "",
 };
 
@@ -35,32 +28,31 @@ const FilesContext = createContext<{
 
 function filesReducer(state: FilesState, action: FilesAction): FilesState {
   switch (action.type) {
-    case "SHOW_HIDDEN_FILES": {
-      return { ...state, showHiddenFiles: action.payload };
-    }
-
-    case "SHOW_ITEMS_AS": {
-      return { ...state, showItemsAs: action.payload };
-    }
-
     case "FILTER": {
       return { ...state, filter: action.payload };
     }
 
     default: {
-      // @ts-expect-error
       throw new Error(`Unhandled action type: ${action.type}`);
     }
   }
 }
 
 interface FilesProviderProps {
+  showHiddenFiles?: boolean;
+  showItemsAs?: "list" | "grid";
+  size?: "small" | "medium" | "large";
   children: React.ReactNode;
 }
 
 function FilesProvider({ children }: FilesProviderProps) {
-  const [state, dispatch] = useReducer(filesReducer, initialState);
+  const [state, dispatch] = useReducer(filesReducer, initialState, () => {
+    return { filter: "" };
+  });
 
+  /**
+   * Reset the filter on navigations.
+   */
   const pathname = usePathname();
 
   useEffect(() => {

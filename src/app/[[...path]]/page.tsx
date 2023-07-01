@@ -1,6 +1,7 @@
 import type { Metadata, ResolvingMetadata } from "next";
 import { homedir } from "os";
 import { join } from "path";
+import { readProviderCookies } from "../context/server";
 import { ActionBar } from "./components/ActionBar";
 import { Directory } from "./components/Directory";
 import { File } from "./components/File";
@@ -28,8 +29,17 @@ async function PageContent(props: PageContentProps) {
 
     case "directory":
       const files = await getFiles(props.currentPath);
+      const { size, showHiddenFiles, showItemsAs } =
+        await readProviderCookies();
 
-      return <Directory files={files} />;
+      return (
+        <Directory
+          files={files}
+          size={size}
+          showItemsAs={showItemsAs}
+          showHiddenFiles={showHiddenFiles}
+        />
+      );
   }
 }
 
@@ -67,6 +77,7 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <main className="flex flex-col min-h-screen h-full overflow-scroll p-8 bg-gray-50 gap-4">
+      {/** @ts-expect-error */}
       <ActionBar
         title={currentPath.replace(homedir(), "~")}
         fileType={fileType}

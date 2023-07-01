@@ -110,6 +110,7 @@ export async function getFileData(dir: string, filename: string) {
     return {
       name: filename,
       path: filePathWithoutHome,
+      fullpath: filePath,
       access: canOpen,
       type,
       hidden: isHidden(filename),
@@ -122,6 +123,7 @@ export async function getFileData(dir: string, filename: string) {
     return {
       name: filename,
       path: filePathWithoutHome,
+      fullpath: filePath,
       access: canOpen,
       type,
       hidden: isHidden(filename),

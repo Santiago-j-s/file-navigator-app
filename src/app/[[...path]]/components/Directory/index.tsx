@@ -1,14 +1,22 @@
 "use client";
 
-import { useFiles } from "../../../filesContext";
+import { useFiles } from "../../../context/filesContext";
 import type { FileData } from "../../services";
 import { FileItem } from "./FileItem";
 
 interface DirectoryProps {
   files: Awaited<Awaited<FileData>[]>;
+  size: "small" | "medium" | "large";
+  showItemsAs: "list" | "grid";
+  showHiddenFiles: boolean;
 }
 
-export function Directory({ files }: DirectoryProps) {
+export function Directory({
+  files,
+  size,
+  showItemsAs,
+  showHiddenFiles,
+}: DirectoryProps) {
   const { state } = useFiles();
 
   const filteredFiles = files.filter((file) => {
@@ -19,18 +27,17 @@ export function Directory({ files }: DirectoryProps) {
 
   const fileItems = filteredFiles.map((file) => (
     <FileItem
-      key={file.path}
-      name={file.name}
-      access={file.access}
-      hidden={file.hidden}
-      type={file.type}
-      path={file.path}
+      key={file.fullpath}
+      {...file}
+      size={size}
+      showHiddenFiles={showHiddenFiles}
+      showItemsAs={showItemsAs}
     />
   ));
 
-  if (state.showItemsAs === "grid") {
+  if (showItemsAs === "grid") {
     return (
-      <ul className="grid grid-cols-4 gap-4 p-4 shadow-md rounded-md">
+      <ul className="grid grid-cols-5 gap-4 p-4 shadow-md rounded-md">
         {fileItems}
       </ul>
     );
