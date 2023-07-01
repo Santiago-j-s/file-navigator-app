@@ -1,18 +1,5 @@
-import clsx from "clsx";
-
-interface EyeProps {
-  className?: string;
-}
-
-export const Eye = ({ className }: EyeProps) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    strokeWidth={1.5}
-    stroke="currentColor"
-    className={clsx("w-6 h-6", className)}
-  >
+export const Eye = () => (
+  <>
     <path
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -23,5 +10,5 @@ export const Eye = ({ className }: EyeProps) => (
       strokeLinejoin="round"
       d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
     />
-  </svg>
+  </>
 );
