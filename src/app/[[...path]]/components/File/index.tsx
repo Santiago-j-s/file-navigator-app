@@ -1,26 +1,6 @@
-import { readFile } from "fs/promises";
 import Image from "next/image";
-import { getFileData, getMimeType } from "../../services";
-
-async function TextFile({ currentPath }: { currentPath: string }) {
-  const mimeType = getMimeType(currentPath);
-  const content = await readFile(currentPath, "utf-8");
-
-  let contentPrettified = content;
-  try {
-    if (mimeType === "application/json") {
-      contentPrettified = JSON.stringify(JSON.parse(content), null, 2);
-    }
-  } catch (error) {
-    console.log(`Error parsing JSON: ${currentPath}`);
-  }
-
-  return (
-    <pre className="bg-gray-800 rounded-md text-gray-300 p-8 whitespace-pre-wrap">
-      <code>{contentPrettified}</code>
-    </pre>
-  );
-}
+import { getFileData } from "../../services";
+import { TextFile } from "./TextFile";
 
 function ImageFile({ currentPath }: { currentPath: string }) {
   return (

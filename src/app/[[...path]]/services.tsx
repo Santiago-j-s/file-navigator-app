@@ -3,7 +3,16 @@ import { access, readdir, stat } from "fs/promises";
 import { homedir } from "os";
 import { join } from "path";
 
-const textExtensions = new Set(["txt", "md", "js", "json", "sql", "ts"]);
+const textExtensions = new Set([
+  "txt",
+  "md",
+  "js",
+  "json",
+  "sql",
+  "ts",
+  "tsx",
+  "jsx",
+]);
 const imageExtensions = new Set(["png", "jpg", "jpeg", "gif"]);
 const videoExtensions = new Set(["mp4", "webm", "ogg", "mov"]);
 
