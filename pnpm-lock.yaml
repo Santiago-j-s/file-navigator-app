@@ -16,6 +16,9 @@ dependencies:
   '@codemirror/lang-javascript':
     specifier: ^6.1.9
     version: 6.1.9
+  '@codemirror/lang-markdown':
+    specifier: ^6.2.0
+    version: 6.2.0
   '@codemirror/language':
     specifier: ^6.8.0
     version: 6.8.0
@@ -153,6 +156,18 @@ packages:
       '@codemirror/view': 6.14.0
       '@lezer/common': 1.0.3
       '@lezer/javascript': 1.4.3
+    dev: false
+
+  /@codemirror/lang-markdown@6.2.0:
+    resolution: {integrity: sha512-deKegEQVzfBAcLPqsJEa+IxotqPVwWZi90UOEvQbfa01NTAw8jNinrykuYPTULGUj+gha0ZG2HBsn4s5d64Qrg==}
+    dependencies:
+      '@codemirror/autocomplete': 6.8.1(@codemirror/language@6.8.0)(@codemirror/state@6.2.1)(@codemirror/view@6.14.0)(@lezer/common@1.0.3)
+      '@codemirror/lang-html': 6.4.5
+      '@codemirror/language': 6.8.0
+      '@codemirror/state': 6.2.1
+      '@codemirror/view': 6.14.0
+      '@lezer/common': 1.0.3
+      '@lezer/markdown': 1.0.5
     dev: false
 
   /@codemirror/language@6.8.0:
@@ -330,6 +345,13 @@ packages:
     resolution: {integrity: sha512-ssHKb3p0MxhJXT2i7UBmgAY1BIM3Uq/D772Qutu3EVmxWIyNMU12nQ0rL3Fhu+MiFtiTzyTmd3xGwEf3ON5PSA==}
     dependencies:
       '@lezer/common': 1.0.3
+    dev: false
+
+  /@lezer/markdown@1.0.5:
+    resolution: {integrity: sha512-J0LRA0l21Ec6ZroaOxjxsWWm+swCOFHcnOU85Z7aH9nj3eJx5ORmtzVkWzs9e21SZrdvyIzM1gt+YF/HnqbvnA==}
+    dependencies:
+      '@lezer/common': 1.0.3
+      '@lezer/highlight': 1.1.6
     dev: false
 
   /@next/env@13.4.2:

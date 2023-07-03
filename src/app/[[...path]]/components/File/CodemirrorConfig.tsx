@@ -8,6 +8,7 @@ import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
 import { css } from "@codemirror/lang-css";
 import { html } from "@codemirror/lang-html";
 import { javascript } from "@codemirror/lang-javascript";
+import { markdown } from "@codemirror/lang-markdown";
 import {
   LanguageSupport,
   bracketMatching,
@@ -66,14 +67,40 @@ const basicSetup: Extension = (() => [
   ]),
 ])();
 
-const languages = new Map([
+type Languages =
+  | "js"
+  | "jsx"
+  | "ts"
+  | "tsx"
+  | "html"
+  | "css"
+  | "scss"
+  | "md"
+  | "markdown"
+  | (string & {});
+
+type LanguageParser = () => LanguageSupport;
+
+const languages = new Map<Languages, LanguageParser>([
   ["js", javascript],
   ["jsx", javascript],
   ["ts", javascript],
   ["tsx", javascript],
   ["html", html],
   ["css", css],
-] as const);
+  ["scss", css],
+  ["md", markdown],
+  ["markdown", markdown],
+]);
+
+const baseTheme = EditorView.baseTheme({
+  "&": {
+    borderRadius: "16px",
+    overflow: "hidden",
+    padding: "0.5rem",
+    paddingBottom: "0",
+  },
+});
 
 export function createEditorView({
   parent,
@@ -84,10 +111,13 @@ export function createEditorView({
   doc: string;
   fileExtension?: string | null;
 }) {
-  const extensions: (Extension | LanguageSupport)[] = [basicSetup, oneDark];
+  const extensions: (Extension | LanguageSupport)[] = [
+    basicSetup,
+    oneDark,
+    baseTheme,
+  ];
 
   if (fileExtension) {
-    // @ts-expect-error
     const parser = languages.get(fileExtension);
 
     if (parser) {
@@ -95,9 +125,11 @@ export function createEditorView({
     }
   }
 
-  return new EditorView({
+  const view = new EditorView({
     extensions,
     parent,
     doc,
   });
+
+  return view;
 }

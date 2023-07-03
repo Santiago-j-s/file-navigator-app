@@ -12,6 +12,9 @@ const textExtensions = new Set([
   "ts",
   "tsx",
   "jsx",
+  "html",
+  "css",
+  "scss",
 ]);
 const imageExtensions = new Set(["png", "jpg", "jpeg", "gif"]);
 const videoExtensions = new Set(["mp4", "webm", "ogg", "mov"]);
