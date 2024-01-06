@@ -3,6 +3,7 @@
 import { z } from "zod";
 
 import { cookies } from "next/headers";
+import invariant from "tiny-invariant";
 
 export async function setContextCookies(data: FormData) {
   const cookieStore = cookies();
@@ -13,18 +14,36 @@ export async function setContextCookies(data: FormData) {
   }
 
   if (data.has("showHiddenFiles")) {
-    // @ts-expect-error
-    cookieStore.set("showHiddenFiles", data.get("showHiddenFiles")?.toString());
+    const showHiddenFiles = data.get("showHiddenFiles");
+
+    invariant(
+      showHiddenFiles === "true" || showHiddenFiles === "false",
+      "showHiddenFiles must be a boolean"
+    );
+
+    cookieStore.set("showHiddenFiles", showHiddenFiles);
   }
 
   if (data.has("showItemsAs")) {
-    // @ts-expect-error
-    cookieStore.set("showItemsAs", data.get("showItemsAs"));
+    const showItemsAs = data.get("showItemsAs");
+
+    invariant(
+      showItemsAs === "list" || showItemsAs === "grid",
+      "showItemsAs must be a list or grid"
+    );
+
+    cookieStore.set("showItemsAs", showItemsAs);
   }
 
   if (data.has("size")) {
-    // @ts-expect-error
-    cookieStore.set("size", data.get("size"));
+    const size = data.get("size");
+
+    invariant(
+      size === "small" || size === "medium" || size === "large",
+      "size must be small, medium or large"
+    );
+
+    cookieStore.set("size", size);
   }
 }
 
