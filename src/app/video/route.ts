@@ -20,6 +20,7 @@ function getContentType(path: string) {
   }
 }
 
+// 1 MB
 const CHUNK_SIZE = 10 ** 6;
 
 export async function GET(request: Request) {
@@ -43,17 +44,17 @@ export async function GET(request: Request) {
   const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
   const contentLength = end - start + 1;
 
-  const video = Readable.toWeb(createReadStream(path, { start, end }));
+  // https://github.com/DefinitelyTyped/DefinitelyTyped/discussions/65542#discussioncomment-6071004
+  const video = Readable.toWeb(
+    createReadStream(path, { start, end })
+  ) as ReadableStream<Uint8Array>;
 
-  // @ts-expect-error - ts doesn't believe that a nodejs ReadableStream is a valid web ReadableStream
-  // maybe ts is right but it works well enough for this example
   return new NextResponse(video, {
-    body: video,
     status: 206,
     headers: {
       "Content-Range": `bytes ${start}-${end}/${videoSize}`,
       "Content-Type": getContentType(path),
-      "Content-Length": contentLength,
+      "Content-Length": contentLength.toString(),
       "Accept-Ranges": "bytes",
     },
   });
