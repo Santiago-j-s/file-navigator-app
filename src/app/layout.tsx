@@ -1,10 +1,13 @@
-import clsx from "clsx";
+import { cn } from "@/lib/utils";
 import { Inter } from "next/font/google";
 import { FilesProvider } from "./context/filesContext";
 import { readProviderCookies } from "./context/server";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const fontSans = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 export const metadata = {
   title: "Create Next App",
@@ -20,8 +23,10 @@ export default async function RootLayout({
 
   return (
     <FilesProvider {...providerValues}>
-      <html lang="en" className="h-full">
-        <body className={clsx(inter.className, "h-full")}>{children}</body>
+      <html lang="en" className="h-full dark">
+        <body className={cn(fontSans.variable, "h-full font-sans")}>
+          {children}
+        </body>
       </html>
     </FilesProvider>
   );
