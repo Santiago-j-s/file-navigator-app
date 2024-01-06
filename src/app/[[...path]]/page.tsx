@@ -26,7 +26,6 @@ async function PageContent(props: PageContentProps) {
       );
 
     case "file":
-      // @ts-expect-error
       return <File currentPath={props.currentPath} />;
 
     case "directory":
@@ -79,12 +78,10 @@ export default async function Page({ params }: PageProps) {
 
   return (
     <main className="flex flex-col min-h-screen h-full overflow-scroll p-8 bg-gray-50 gap-4">
-      {/** @ts-expect-error */}
       <ActionBar
         title={currentPath.replace(homedir(), "~")}
         fileType={fileType}
       />
-      {/** @ts-expect-error */}
       <PageContent fileType={fileType} currentPath={currentPath} />
     </main>
   );

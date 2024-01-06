@@ -58,10 +58,7 @@ export async function File({ currentPath }: FileProps) {
   }
 
   if (file.openAs === "text") {
-    return (
-      /** @ts-expect-error */
-      <TextFile currentPath={currentPath} />
-    );
+    return <TextFile currentPath={currentPath} />;
   }
 
   if (file.openAs === "image") {
