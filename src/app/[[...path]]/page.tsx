@@ -7,6 +7,8 @@ import { Directory } from "./components/Directory";
 import { File } from "./components/File";
 import { getFileType, getFiles } from "./services";
 
+export const dynamic = "force-dynamic";
+
 type PageContentProps =
   | { fileType: "unknown" }
   | { fileType: "file"; currentPath: string }
