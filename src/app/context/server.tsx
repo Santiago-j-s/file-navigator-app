@@ -5,7 +5,7 @@ import { z } from "zod";
 import { cookies } from "next/headers";
 import invariant from "tiny-invariant";
 
-export async function setContextCookies(data: FormData) {
+export async function setCookies(data: FormData) {
   const cookieStore = cookies();
 
   if (!data) {
@@ -53,7 +53,7 @@ const filesStateSchema = z.object({
   size: z.enum(["small", "medium", "large"] as const),
 });
 
-export async function readProviderCookies(): Promise<{
+export async function readCookies(): Promise<{
   showHiddenFiles: boolean;
   showItemsAs: "list" | "grid";
   size: "small" | "medium" | "large";

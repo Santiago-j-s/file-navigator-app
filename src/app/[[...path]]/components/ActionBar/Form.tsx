@@ -1,4 +1,4 @@
-import { setContextCookies } from "@/app/context/server";
+import { setCookies } from "@/app/context/server";
 
 interface FormProps {
   children: React.ReactNode;
@@ -6,7 +6,7 @@ interface FormProps {
 
 export async function Form({ children }: FormProps) {
   return (
-    <form action={setContextCookies} className="flex gap-2">
+    <form action={setCookies} className="flex gap-2">
       {children}
     </form>
   );

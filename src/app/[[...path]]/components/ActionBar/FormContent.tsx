@@ -1,6 +1,6 @@
 "use client";
 
-import { useFiles } from "@/app/context/filesContext";
+import { useFilter } from "@/app/context/filterContext";
 import Icon from "@/app/icons/Icon";
 import type { FileType } from "../../../fs/getFileType";
 
@@ -97,7 +97,7 @@ function BackButton({ title }: { title: string }) {
 }
 
 function FilterInput() {
-  const { dispatch } = useFiles();
+  const { setFilter } = useFilter();
 
   return (
     <input
@@ -105,7 +105,7 @@ function FilterInput() {
       className="px-4 py-2 flex-1 font-medium text-gray-500 bg-gray-50 rounded-md focus:outline-none focus:outline-gray-400"
       placeholder="Filter"
       onChange={(event) => {
-        dispatch({ type: "FILTER", payload: event.target.value });
+        setFilter(event.target.value);
       }}
     />
   );

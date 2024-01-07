@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { homedir } from "os";
 import { join } from "path";
-import { readProviderCookies } from "../context/server";
+import { readCookies } from "../context/server";
 import { getFileType } from "../fs/getFileType";
 import { getFiles } from "../fs/getFiles";
 import { ActionBar } from "./components/ActionBar";
@@ -31,8 +31,7 @@ async function PageContent(props: PageContentProps) {
 
     case "directory":
       const files = await getFiles(props.currentPath);
-      const { size, showHiddenFiles, showItemsAs } =
-        await readProviderCookies();
+      const { size, showHiddenFiles, showItemsAs } = await readCookies();
 
       return (
         <Directory

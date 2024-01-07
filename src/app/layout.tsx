@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Inter } from "next/font/google";
-import { FilesProvider } from "./context/filesContext";
-import { readProviderCookies } from "./context/server";
+import { FilterProvider } from "./context/filterContext";
 import "./globals.css";
 
 const fontSans = Inter({
@@ -19,15 +18,13 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const providerValues = await readProviderCookies();
-
   return (
-    <FilesProvider {...providerValues}>
+    <FilterProvider>
       <html lang="en" className="h-full dark">
         <body className={cn(fontSans.variable, "h-full font-sans")}>
           {children}
         </body>
       </html>
-    </FilesProvider>
+    </FilterProvider>
   );
 }

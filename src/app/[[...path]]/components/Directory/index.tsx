@@ -1,7 +1,7 @@
 "use client";
 
 import type { FileData } from "@/app/fs/getFileData";
-import { useFiles } from "../../../context/filesContext";
+import { useFilter } from "../../../context/filterContext";
 import { FileItem } from "./FileItem";
 
 interface DirectoryProps {
@@ -17,12 +17,12 @@ export function Directory({
   showItemsAs,
   showHiddenFiles,
 }: DirectoryProps) {
-  const { state } = useFiles();
+  const { filter } = useFilter();
 
   const filteredFiles = files.filter((file) => {
-    if (!state.filter) return true;
+    if (!filter) return true;
 
-    return file.name.toLowerCase().includes(state.filter.toLowerCase());
+    return file.name.toLowerCase().includes(filter.toLowerCase());
   });
 
   const fileItems = filteredFiles.map((file) => (
