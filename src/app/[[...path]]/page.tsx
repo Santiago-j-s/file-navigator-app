@@ -1,3 +1,5 @@
+import type { Stats } from "fs";
+import { stat } from "fs/promises";
 import type { Metadata } from "next";
 import { homedir } from "os";
 import { join } from "path";
@@ -73,10 +75,21 @@ export default async function Page({ params }: PageProps) {
     decodeURIComponent(path?.join("/") ?? [])
   );
 
-  const fileType = await getFileType(currentPath);
+  let fileStat: Stats | null;
+
+  try {
+    fileStat = await stat(currentPath);
+  } catch (error) {
+    fileStat = null;
+  }
+
+  const fileType = await getFileType(fileStat);
 
   return (
-    <main className="flex flex-col min-h-screen h-full overflow-scroll p-8 bg-gray-50 gap-4">
+    <main
+      className="flex flex-col min-h-screen h-full overflow-auto p-8 gap-4"
+      style={{ scrollbarGutter: "stable" }}
+    >
       <ActionBar
         title={currentPath.replace(homedir(), "~")}
         fileType={fileType}

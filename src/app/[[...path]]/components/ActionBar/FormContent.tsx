@@ -2,6 +2,15 @@
 
 import { useFilter } from "@/app/context/filterContext";
 import Icon from "@/app/icons/Icon";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { FileType } from "../../../fs/getFileType";
 
 interface FormContentProps {
@@ -10,6 +19,7 @@ interface FormContentProps {
   size: "small" | "medium" | "large";
   showHiddenFiles: boolean;
   showItemsAs: "list" | "grid";
+  formRef: React.RefObject<HTMLFormElement>;
 }
 
 export function FormContent({
@@ -18,6 +28,7 @@ export function FormContent({
   size,
   showHiddenFiles,
   showItemsAs,
+  formRef,
 }: FormContentProps) {
   return (
     <>
@@ -26,22 +37,28 @@ export function FormContent({
       {fileType === "directory" && (
         <>
           <FilterInput />
-          <select
-            id="set-size"
-            className="px-4 py-2 font-medium text-gray-500 bg-gray-50 rounded-md focus:outline-none focus:outline-gray-400"
+          <Select
             name="size"
-            onChange={(event) => {
-              if (event.currentTarget.form == null) return;
-              event.currentTarget.form.requestSubmit();
+            onValueChange={() => {
+              if (formRef.current == null) {
+                return;
+              }
+
+              formRef.current.requestSubmit();
             }}
             defaultValue={size}
           >
-            <option value="small">Small</option>
-            <option value="medium">Medium</option>
-            <option value="large">Large</option>
-          </select>
-          <button
-            className="ml-auto flex items-center gap-1 text-gray-500 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md w-fit"
+            <SelectTrigger className="w-40">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="small">Small</SelectItem>
+              <SelectItem value="medium">Medium</SelectItem>
+              <SelectItem value="large">Large</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button
+            variant="outline"
             title={showHiddenFiles ? "Hide hidden files" : "Show hidden files"}
             name="showHiddenFiles"
             value={showHiddenFiles ? "false" : "true"}
@@ -50,9 +67,9 @@ export function FormContent({
               name={showHiddenFiles ? "eye-slash" : "eye"}
               className="w-5 h-5"
             />
-          </button>
-          <button
-            className="flex items-center gap-1 text-gray-500 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md w-fit"
+          </Button>
+          <Button
+            variant="outline"
             title={
               showItemsAs === "grid"
                 ? "View items as list"
@@ -66,7 +83,7 @@ export function FormContent({
               name={showItemsAs === "grid" ? "list" : "grid"}
               className="w-5 h-5"
             />
-          </button>
+          </Button>
         </>
       )}
     </>
@@ -75,7 +92,7 @@ export function FormContent({
 
 function CurrentPath({ title }: { title: string }) {
   return (
-    <div className="px-4 py-2 font-medium text-gray-500 bg-gray-50 rounded-md">
+    <div className="px-4 py-2 font-medium rounded-md bg-background">
       {title}
     </div>
   );
@@ -83,16 +100,16 @@ function CurrentPath({ title }: { title: string }) {
 
 function BackButton({ title }: { title: string }) {
   return (
-    <button
+    <Button
+      variant="outline"
       disabled={title === "~"}
-      className="flex items-center gap-1 text-gray-500 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md w-fit disabled:bg-gray-100 disabled:text-gray-300"
       title="Go back"
       onClick={() => {
         window.history.back();
       }}
     >
       <Icon name="arrow-left" className="w-5 h-5" />
-    </button>
+    </Button>
   );
 }
 
@@ -100,10 +117,10 @@ function FilterInput() {
   const { setFilter } = useFilter();
 
   return (
-    <input
+    <Input
       type="text"
-      className="px-4 py-2 flex-1 font-medium text-gray-500 bg-gray-50 rounded-md focus:outline-none focus:outline-gray-400"
       placeholder="Filter"
+      className="flex-1"
       onChange={(event) => {
         setFilter(event.target.value);
       }}

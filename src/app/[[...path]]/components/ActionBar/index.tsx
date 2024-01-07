@@ -1,6 +1,6 @@
-import { readCookies, setCookies } from "@/app/context/server";
+import { readCookies } from "@/app/context/server";
 import type { FileType } from "@/app/fs/getFileType";
-import { FormContent } from "./FormContent";
+import { ActionBarClient } from "./ActionBar.client";
 
 interface ActionBarProps {
   title: string;
@@ -11,14 +11,12 @@ export async function ActionBar({ title, fileType }: ActionBarProps) {
   const { showHiddenFiles, showItemsAs, size } = await readCookies();
 
   return (
-    <form action={setCookies} className="flex gap-2">
-      <FormContent
-        title={title}
-        fileType={fileType}
-        size={size}
-        showHiddenFiles={showHiddenFiles}
-        showItemsAs={showItemsAs}
-      />
-    </form>
+    <ActionBarClient
+      showHiddenFiles={showHiddenFiles}
+      showItemsAs={showItemsAs}
+      size={size}
+      title={title}
+      fileType={fileType}
+    />
   );
 }

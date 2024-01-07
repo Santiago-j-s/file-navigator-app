@@ -28,10 +28,9 @@ export function Directory({
   const fileItems = filteredFiles.map((file) => (
     <FileItem
       key={file.fullpath}
-      {...file}
+      file={file}
       size={size}
       showHiddenFiles={showHiddenFiles}
-      showItemsAs={showItemsAs}
     />
   ));
 
@@ -44,8 +43,6 @@ export function Directory({
   }
 
   return (
-    <div className="flex flex-col bg-white rounded-md shadow-md">
-      <ul>{fileItems}</ul>
-    </div>
+    <ul className="flex flex-col rounded-md shadow-md gap-2">{fileItems}</ul>
   );
 }

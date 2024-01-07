@@ -1,4 +1,5 @@
-import { access } from "fs/promises";
+import { type Stats } from "fs";
+import { access, readdir, stat } from "fs/promises";
 import { homedir } from "os";
 import { join } from "path";
 import { getExtension } from "./getExtension";
@@ -15,7 +16,15 @@ export async function getFileData(dir: string, filename: string) {
     .then(() => true)
     .catch(() => false);
 
-  const type = await getFileType(filePath);
+  let fileStat: Stats | null;
+
+  try {
+    fileStat = await stat(filePath);
+  } catch (error) {
+    fileStat = null;
+  }
+
+  const type = await getFileType(fileStat);
 
   if (type === "directory" || type === "unknown") {
     return {
@@ -25,6 +34,12 @@ export async function getFileData(dir: string, filename: string) {
       access: canOpen,
       type,
       hidden: isHidden(filename),
+      numberOfItems:
+        canOpen && type === "directory"
+          ? await readdir(filePath)
+              .then((files) => files.length)
+              .catch(() => null)
+          : null,
     };
   }
 
@@ -41,6 +56,7 @@ export async function getFileData(dir: string, filename: string) {
       extension,
       mimeType: getMimeType(filename),
       openAs: openAs(extension),
+      size: fileStat && fileStat.size,
     };
   }
 

@@ -1,23 +1,17 @@
 import { Stats } from "fs";
-import { stat } from "fs/promises";
 
 export type FileType = "file" | "directory" | "unknown";
 
-export async function getFileType(file: string): Promise<FileType> {
-  let stats: Stats;
-
-  try {
-    stats = await stat(file);
-  } catch (error) {
-    console.log(error);
+export async function getFileType(fileStat: Stats | null): Promise<FileType> {
+  if (!fileStat) {
     return "unknown";
   }
 
-  if (stats.isDirectory()) {
+  if (fileStat.isDirectory()) {
     return "directory";
   }
 
-  if (stats.isFile()) {
+  if (fileStat.isFile()) {
     return "file";
   }
 

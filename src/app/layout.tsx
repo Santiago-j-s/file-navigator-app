@@ -21,7 +21,12 @@ export default async function RootLayout({
   return (
     <FilterProvider>
       <html lang="en" className="h-full dark">
-        <body className={cn(fontSans.variable, "h-full font-sans")}>
+        <body
+          className={cn(
+            fontSans.variable,
+            "min-h-screen h-full bg-background font-sans antialiased"
+          )}
+        >
           {children}
         </body>
       </html>
