@@ -1,34 +1,20 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# File Navigation App
 
-## Getting Started
+[![forthebadge](data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTEuMzMzMzMyMDYxNzY3NTgiIGhlaWdodD0iMzUiIHZpZXdCb3g9IjAgMCAxOTEuMzMzMzMyMDYxNzY3NTggMzUiPjxyZWN0IHdpZHRoPSIxMDcuNjY2NjY0MTIzNTM1MTYiIGhlaWdodD0iMzUiIGZpbGw9IiNmZmZmZmYiLz48cmVjdCB4PSIxMDcuNjY2NjY0MTIzNTM1MTYiIHdpZHRoPSI4My42NjY2Njc5MzgyMzI0MiIgaGVpZ2h0PSIzNSIgZmlsbD0iIzAwMDAwMCIvPjx0ZXh0IHg9IjUzLjgzMzMzMjA2MTc2NzU4IiB5PSIxNy41IiBmb250LXNpemU9IjEyIiBmb250LWZhbWlseT0iJ1JvYm90bycsIHNhbnMtc2VyaWYiIGZpbGw9IiMwMDAwMDAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGFsaWdubWVudC1iYXNlbGluZT0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iMiI+TUFERSBXSVRIPC90ZXh0Pjx0ZXh0IHg9IjE0OS40OTk5OTgwOTI2NTEzNyIgeT0iMTcuNSIgZm9udC1zaXplPSIxMiIgZm9udC1mYW1pbHk9IidNb250c2VycmF0Jywgc2Fucy1zZXJpZiIgZmlsbD0iI0ZGRkZGRiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC13ZWlnaHQ9IjkwMCIgYWxpZ25tZW50LWJhc2VsaW5lPSJtaWRkbGUiIGxldHRlci1zcGFjaW5nPSIyIj5ORVhUIDE0PC90ZXh0Pjwvc3ZnPg==)](https://forthebadge.com)
 
-First, run the development server:
+A little app I made to play a bit with server components
+
+It's a file navigator that allows you to navigate through your files and folders, and see the content of the files.
+
+It supports [text, images, and videos](https://github.com/Santiago-j-s/file-navigator-app/blob/main/src/app/fs/openAs.tsx), for now it's read-only, but write support is planned
+
+I tested it on Linux and Mac, but it should work on Windows too
+
+## Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+git clone https://github.com/Santiago-j-s/file-navigator-app
+cd file-navigator-app
+pnpm install
+pnpm run dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
