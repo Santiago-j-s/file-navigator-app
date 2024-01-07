@@ -1,5 +1,5 @@
+import { getFileData } from "@/app/fs/getFileData";
 import Image from "next/image";
-import { getFileData } from "../../services";
 import { TextFile } from "./TextFile";
 
 function ImageFile({ currentPath }: { currentPath: string }) {

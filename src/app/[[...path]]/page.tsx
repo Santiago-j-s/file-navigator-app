@@ -1,11 +1,12 @@
-import type { Metadata, ResolvingMetadata } from "next";
+import type { Metadata } from "next";
 import { homedir } from "os";
 import { join } from "path";
 import { readProviderCookies } from "../context/server";
+import { getFileType } from "../fs/getFileType";
+import { getFiles } from "../fs/getFiles";
 import { ActionBar } from "./components/ActionBar";
 import { Directory } from "./components/Directory";
 import { File } from "./components/File";
-import { getFileType, getFiles } from "./services";
 
 export const dynamic = "force-dynamic";
 
@@ -50,15 +51,14 @@ interface PageProps {
   };
 }
 
-export async function generateMetadata(
-  { params }: PageProps,
-  parent?: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { path } = params;
 
   const currentPath = join(
     homedir(),
-    decodeURIComponent(path?.join("/") ?? [])
+    decodeURIComponent(path?.join("/") ?? "")
   );
 
   return {

@@ -1,5 +1,5 @@
 import { readProviderCookies, setContextCookies } from "@/app/context/server";
-import type { FileType } from "../../services";
+import type { FileType } from "@/app/fs/getFileType";
 import { FormContent } from "./FormContent";
 
 interface ActionBarProps {

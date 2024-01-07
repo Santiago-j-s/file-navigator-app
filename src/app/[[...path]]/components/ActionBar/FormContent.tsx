@@ -2,7 +2,7 @@
 
 import { useFiles } from "@/app/context/filesContext";
 import Icon from "@/app/icons/Icon";
-import type { FileType } from "../../services";
+import type { FileType } from "../../../fs/getFileType";
 
 interface FormContentProps {
   title: string;

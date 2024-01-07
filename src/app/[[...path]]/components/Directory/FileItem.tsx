@@ -1,10 +1,10 @@
 "use client";
 
+import type { FileData } from "@/app/fs/getFileData";
 import Icon from "@/app/icons/Icon";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
-import type { FileData } from "../../services";
 
 type LinkWrapperProps = Pick<Awaited<FileData>, "access" | "path"> & {
   children: React.ReactNode;

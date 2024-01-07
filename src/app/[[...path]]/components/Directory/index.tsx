@@ -1,7 +1,7 @@
 "use client";
 
+import type { FileData } from "@/app/fs/getFileData";
 import { useFiles } from "../../../context/filesContext";
-import type { FileData } from "../../services";
 import { FileItem } from "./FileItem";
 
 interface DirectoryProps {
