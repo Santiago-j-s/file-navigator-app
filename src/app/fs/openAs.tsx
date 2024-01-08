@@ -10,6 +10,8 @@ const textExtensions = new Set([
   "html",
   "css",
   "scss",
+  "yml",
+  "yaml",
 ]);
 const imageExtensions = new Set(["png", "jpg", "jpeg", "gif"]);
 const videoExtensions = new Set(["mp4", "webm", "ogg", "mov"]);

@@ -11,7 +11,8 @@ export type MimeTypes =
   | "video/mp4"
   | "video/webm"
   | "video/ogg"
-  | "video/quicktime";
+  | "video/quicktime"
+  | "text/yaml";
 
 export function getMimeType(filename: string): MimeTypes | null {
   const extension = getExtension(filename);
@@ -44,6 +45,9 @@ export function getMimeType(filename: string): MimeTypes | null {
       return "video/ogg";
     case "mov":
       return "video/quicktime";
+    case "yml":
+    case "yaml":
+      return "text/yaml";
     default:
       return null;
   }
