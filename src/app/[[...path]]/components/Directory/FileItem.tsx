@@ -52,10 +52,10 @@ export function FileItem({ file, size, showHiddenFiles }: FileItemProps) {
         {isImage ? (
           <div
             className={cn(
-              "relative",
-              size === "small" && "h-6 w-6",
-              size === "medium" && "h-10 w-10",
-              size === "large" && "w-24 h-24"
+              "relative border-white",
+              size === "small" && "h-6 w-6 border",
+              size === "medium" && "h-10 w-10 border-2",
+              size === "large" && "w-24 h-24 border-4"
             )}
           >
             <Image
