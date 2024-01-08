@@ -34,6 +34,8 @@ export async function getFileData(dir: string, filename: string) {
       access: canOpen,
       type,
       hidden: isHidden(filename),
+      birthDate: fileStat?.birthtime,
+      lastModifiedDate: fileStat?.mtime,
       numberOfItems:
         canOpen && type === "directory"
           ? await readdir(filePath)
@@ -56,6 +58,8 @@ export async function getFileData(dir: string, filename: string) {
       extension,
       mimeType: getMimeType(filename),
       openAs: openAs(extension),
+      birthDate: fileStat?.birthtime,
+      lastModifiedDate: fileStat?.mtime,
       size: fileStat && fileStat.size,
     };
   }

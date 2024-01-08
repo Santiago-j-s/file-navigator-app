@@ -9,15 +9,16 @@ import Image from "next/image";
 import Link from "next/link";
 
 type LinkWrapperProps = Pick<Awaited<FileData>, "access" | "path"> & {
+  className?: string;
   children: React.ReactNode;
 };
 
-export function LinkWrapper({ path, access, children }: LinkWrapperProps) {
-  const className = cn(
-    "flex items-center space-x-3 w-full overflow-hidden truncate",
-    !access && "cursor-not-allowed opacity-50"
-  );
-
+export function LinkWrapper({
+  path,
+  access,
+  children,
+  className,
+}: LinkWrapperProps) {
   if (access) {
     return (
       <Link href={path} className={className}>
@@ -48,7 +49,14 @@ export function FileItem({ file, size, showHiddenFiles }: FileItemProps) {
         file.name
       }`}
     >
-      <LinkWrapper access={file.access} path={file.path}>
+      <LinkWrapper
+        access={file.access}
+        path={file.path}
+        className={cn(
+          "flex items-center space-x-3 w-full overflow-hidden truncate",
+          !file.access && "cursor-not-allowed opacity-50"
+        )}
+      >
         {isImage ? (
           <div
             className={cn(
@@ -87,6 +95,16 @@ export function FileItem({ file, size, showHiddenFiles }: FileItemProps) {
               ? formatBytes(file.size)
               : null}
           </p>
+          {file.birthDate && (
+            <p className="text-xs text-gray-500">
+              Created:{" "}
+              {file.birthDate.toLocaleDateString("es-AR", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+              })}
+            </p>
+          )}
         </div>
       </LinkWrapper>
     </li>
