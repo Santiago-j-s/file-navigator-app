@@ -15,10 +15,11 @@ const textExtensions = new Set([
 ]);
 const imageExtensions = new Set(["png", "jpg", "jpeg", "gif"]);
 const videoExtensions = new Set(["mp4", "webm", "ogg", "mov"]);
+const pdfExtensions = new Set(["pdf"]);
 
 export function openAs(
   extension?: string | null
-): "none" | "text" | "image" | "video" {
+): "none" | "text" | "image" | "video" | "pdf" {
   if (!extension) {
     return "none";
   }
@@ -33,6 +34,10 @@ export function openAs(
 
   if (videoExtensions.has(extension)) {
     return "video";
+  }
+
+  if (pdfExtensions.has(extension)) {
+    return "pdf";
   }
 
   return "none";

@@ -35,6 +35,24 @@ function VideoFile({
   );
 }
 
+function PdfFile({ currentPath }: { currentPath: string }) {
+  return (
+    <div className="flex justify-center relative">
+      <object
+        data={`/pdf?path=${currentPath}`}
+        type="application/pdf"
+        width="800"
+        height="1200"
+      >
+        <p>
+          You don&apos;t have a PDF plugin, but you can
+          <a href={`/pdf?path=${currentPath}`}>download the PDF file. </a>
+        </p>
+      </object>
+    </div>
+  );
+}
+
 interface FileProps {
   currentPath: string;
 }
@@ -67,6 +85,10 @@ export async function File({ currentPath }: FileProps) {
 
   if (file.openAs === "video") {
     return <VideoFile currentPath={currentPath} mimeType={file.mimeType} />;
+  }
+
+  if (file.openAs === "pdf") {
+    return <PdfFile currentPath={currentPath} />;
   }
 
   return (
