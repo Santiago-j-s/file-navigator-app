@@ -12,7 +12,12 @@ export type MimeTypes =
   | "video/webm"
   | "video/ogg"
   | "video/quicktime"
-  | "text/yaml";
+  | "text/yaml"
+  | "image/vnd.adobe.photoshop"
+  | "application/pdf"
+  | "application/x-apple-diskimage"
+  | "image/svg+xml"
+  | "text/csv";
 
 export function getMimeType(filename: string): MimeTypes | null {
   const extension = getExtension(filename);
@@ -48,6 +53,18 @@ export function getMimeType(filename: string): MimeTypes | null {
     case "yml":
     case "yaml":
       return "text/yaml";
+    case "psd":
+      return "image/vnd.adobe.photoshop";
+    case "pdf":
+      return "application/pdf";
+    case "dmg":
+      return "application/x-apple-diskimage";
+    case "excalidraw":
+      return "application/json";
+    case "svg":
+      return "image/svg+xml";
+    case "csv":
+      return "text/csv";
     default:
       return null;
   }
