@@ -75,25 +75,20 @@ export async function File({ currentPath }: FileProps) {
     );
   }
 
-  if (file.openAs === "text") {
-    return <TextFile currentPath={currentPath} />;
+  switch (file.openAs) {
+    case "text":
+      return <TextFile currentPath={currentPath} />;
+    case "image":
+      return <ImageFile currentPath={currentPath} />;
+    case "video":
+      return <VideoFile currentPath={currentPath} mimeType={file.mimeType} />;
+    case "pdf":
+      return <PdfFile currentPath={currentPath} />;
+    default:
+      return (
+        <pre>
+          <code>file: {JSON.stringify(file, null, 2)}</code>
+        </pre>
+      );
   }
-
-  if (file.openAs === "image") {
-    return <ImageFile currentPath={currentPath} />;
-  }
-
-  if (file.openAs === "video") {
-    return <VideoFile currentPath={currentPath} mimeType={file.mimeType} />;
-  }
-
-  if (file.openAs === "pdf") {
-    return <PdfFile currentPath={currentPath} />;
-  }
-
-  return (
-    <pre>
-      <code>file: {JSON.stringify(file, null, 2)}</code>
-    </pre>
-  );
 }
