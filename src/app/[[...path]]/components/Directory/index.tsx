@@ -1,8 +1,9 @@
 "use client";
 
 import type { FileData } from "@/app/fs/getFileData";
+import { Table, TableBody } from "@/components/ui/table";
 import { useFilter } from "../../../context/filterContext";
-import { FileItem } from "./FileItem";
+import { FileGridItem, FileListItem } from "./FileItem";
 
 interface DirectoryProps {
   files: Awaited<Awaited<FileData>[]>;
@@ -25,24 +26,33 @@ export function Directory({
     return file.name.toLowerCase().includes(filter.toLowerCase());
   });
 
-  const fileItems = filteredFiles.map((file) => (
-    <FileItem
-      key={file.fullpath}
-      file={file}
-      size={size}
-      showHiddenFiles={showHiddenFiles}
-    />
-  ));
-
   if (showItemsAs === "grid") {
     return (
       <ul className="grid grid-cols-5 gap-4 p-4 shadow-md rounded-md">
-        {fileItems}
+        {filteredFiles.map((file) => (
+          <FileGridItem
+            key={file.fullpath}
+            file={file}
+            size={size}
+            showHiddenFiles={showHiddenFiles}
+          />
+        ))}
       </ul>
     );
   }
 
   return (
-    <ul className="flex flex-col rounded-md shadow-md gap-2">{fileItems}</ul>
+    <Table>
+      <TableBody>
+        {filteredFiles.map((file) => (
+          <FileListItem
+            key={file.fullpath}
+            file={file}
+            size={size}
+            showHiddenFiles={showHiddenFiles}
+          />
+        ))}
+      </TableBody>
+    </Table>
   );
 }
